@@ -1,5 +1,4 @@
 # syntax=docker/dockerfile
-# web hook
 FROM node:18-alpine
 RUN apk add --no-cache python3 g++ make
 WORKDIR /app
