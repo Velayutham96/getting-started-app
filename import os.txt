@@ -1,0 +1,23 @@
+import os
+import boto3
+
+def get_disk_usage_percentage(path='/'):
+    statvfs = os.statvfs(path)
+    total = statvfs.f_blocks * statvfs.f_frsize
+    available = statvfs.f_bavail * statvfs.f_frsize
+    used = total - available
+    usage_percentage = (used / total) * 100
+    return usage_percentage
+
+def publish_to_cloudwatch(namespace, metric_name, value):
+    cloudwatch = boto3.client('cloudwatch')
+    cloudwatch.put_metric_data(
+        Namespace=namespace,
+        MetricData=[
+            {
+                'MetricName': metric_name,
+                'Value': value,
+                'Unit': 'Percent'
+            },
+        ]
+    
